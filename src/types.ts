@@ -10,7 +10,6 @@ export interface Profile {
   linkedin: string;
   github: string;
   resume: string;
-  photo: string;
 }
 
 export interface Service {

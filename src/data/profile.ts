@@ -8,9 +8,8 @@ export const ME: Profile = {
   phone: "+91 83094 33790",
   location: "Hyderabad, Telangana, India",
   linkedin: "https://www.linkedin.com/in/nishath-tarannum-49b184259",
-  github: "https://github.com/your-handle", // TODO: paste your GitHub URL
-  resume: "/Nishath_Tarannum_Resume.pdf", // TODO: drop the PDF into public/
-  photo: "", // TODO: add "/profile.jpg" to public/ — falls back to initials
+  github: "https://github.com/Nishath19/nishath-portfolio",
+  resume: "/Nishath_Tarannum_Resume.pdf",
 };
 
 export const ROLES: string[] = [

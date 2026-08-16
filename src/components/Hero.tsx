@@ -42,7 +42,7 @@ export function Hero() {
         <div className="hero-photo">
           <div className="ring">
             <div className="ring-in">
-              {ME.photo ? <img src={ME.photo} alt={ME.name} /> : <div className="initials">{initials}</div>}
+              <div className="initials">{initials}</div>
             </div>
           </div>
           <span className="orbit o1">
