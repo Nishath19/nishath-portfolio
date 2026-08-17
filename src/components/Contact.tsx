@@ -8,9 +8,11 @@ import type { ContactForm } from "@/types";
 
 const EMPTY: ContactForm = { name: "", email: "", subject: "", message: "" };
 
+type SendStatus = "idle" | "sending" | "sent" | "error";
+
 export function Contact() {
   const [form, setForm] = useState<ContactForm>(EMPTY);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<SendStatus>("idle");
 
   const update =
     (field: keyof ContactForm) =>
@@ -18,12 +20,20 @@ export function Contact() {
       setForm((prev) => ({ ...prev, [field]: event.target.value }));
     };
 
-  const send = (): void => {
+  const send = async (): Promise<void> => {
     if (!form.name || !form.email || !form.message) return;
-    const subject = encodeURIComponent(form.subject || `Portfolio enquiry from ${form.name}`);
-    const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
-    window.location.href = `mailto:${ME.email}?subject=${subject}&body=${body}`;
-    setSent(true);
+    setStatus("sending");
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ "form-name": "contact", ...form }).toString(),
+      });
+      setStatus("sent");
+      setForm(EMPTY);
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -77,10 +87,13 @@ export function Contact() {
           </div>
           <input placeholder="Subject" value={form.subject} onChange={update("subject")} />
           <textarea placeholder="Your message" rows={5} value={form.message} onChange={update("message")} />
-          <button className="btn full" onClick={send}>
-            <Send size={16} /> {sent ? "Opening your mail app…" : "Send message"}
+          <button className="btn full" onClick={send} disabled={status === "sending"}>
+            <Send size={16} />
+            {status === "sent" ? "Message sent" : status === "sending" ? "Sending…" : "Send message"}
           </button>
-          <p className="f-note">Opens your email client. Swap in a Spring Boot endpoint to send server-side.</p>
+          {status === "error" && (
+            <p className="f-note">Something went wrong — email me directly at {ME.email}.</p>
+          )}
         </div>
       </div>
     </Section>

@@ -20,6 +20,14 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Static shadow of the Contact form so Netlify's build-time crawler can detect and
+         register it — the real form is rendered client-side by React and submitted via fetch. -->
+    <form name="contact" data-netlify="true" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="subject" />
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
